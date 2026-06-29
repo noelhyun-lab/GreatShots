@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're Invited — RSVP</title>
+<style>
+  :root{
+    --bg:#fff7ed; --card:#ffffff; --ink:#3b2415; --muted:#8a6d57;
+    --accent:#e4572e; --accent2:#f4a900; --green:#2e8b57; --line:#f0d9bf;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); background:var(--bg);
+    background-image:radial-gradient(circle at 20% 0%, #ffe7c4 0, transparent 40%),
+                     radial-gradient(circle at 90% 10%, #ffd9d0 0, transparent 35%);
+    min-height:100vh; padding:24px 16px;
+  }
+  .wrap{max-width:620px; margin:0 auto}
+  .banner{
+    text-align:center; padding:6px 0 18px;
+  }
+  .banner .papel{font-size:24px; letter-spacing:6px}
+  h1{
+    font-size:34px; margin:6px 0 2px; line-height:1.1;
+    background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text;
+    background-clip:text; color:transparent;
+  }
+  .sub{color:var(--muted); font-size:15px; margin:0}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:18px;
+    padding:22px 20px; margin-top:18px; box-shadow:0 8px 24px rgba(180,120,60,.10);
+  }
+  .flyer{display:flex; align-items:center; justify-content:center; text-align:center; min-height:200px;
+    border:2px dashed var(--accent2); border-radius:16px; margin-top:18px; color:var(--muted);
+    background:#fffdf7; padding:20px;}
+  .flyer img{max-width:100%; border-radius:12px; display:block}
+  .two{display:flex; gap:10px}
+  .two>div{flex:1}
+  .details{display:flex; flex-direction:column; gap:8px; font-size:15px}
+  .details .row{display:flex; gap:10px; align-items:flex-start}
+  .details .ico{font-size:18px; width:24px; text-align:center}
+  .details a{color:var(--accent); text-decoration:none}
+  label{font-weight:600; font-size:14px; display:block; margin:14px 0 6px}
+  input[type=text], input[type=email], input[type=tel], input[type=number], textarea, select{
+    width:100%; padding:11px 12px; font-size:15px; border:1px solid var(--line);
+    border-radius:10px; background:#fffdfa; color:var(--ink); font-family:inherit;
+  }
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--accent2); border-color:transparent}
+  .attend{display:flex; gap:10px; margin-top:6px}
+  .attend label{
+    flex:1; margin:0; text-align:center; padding:12px; border:1px solid var(--line);
+    border-radius:10px; cursor:pointer; font-weight:600; background:#fffdfa; transition:.15s;
+  }
+  .attend input{display:none}
+  .attend input:checked + span{}
+  .attend label:has(input:checked){background:var(--accent); color:#fff; border-color:var(--accent)}
+  .dishes{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px}
+  .dish{
+    display:flex; align-items:center; gap:8px; padding:10px 11px; border:1px solid var(--line);
+    border-radius:10px; cursor:pointer; font-size:14px; background:#fffdfa; transition:.15s;
+  }
+  .dish:has(input:checked){background:#fff2e6; border-color:var(--accent2)}
+  .dish input{accent-color:var(--accent); width:17px; height:17px}
+  .hint{font-size:13px; color:var(--muted); margin:4px 0 0}
+  .cat{font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.5px;
+       color:var(--accent); margin:16px 0 2px}
+  button{
+    width:100%; margin-top:20px; padding:15px; font-size:16px; font-weight:700; color:#fff;
+    background:linear-gradient(90deg,var(--accent),var(--accent2)); border:none; border-radius:12px;
+    cursor:pointer; box-shadow:0 6px 16px rgba(228,87,46,.3);
+  }
+  button:active{transform:translateY(1px)}
+  .foot{text-align:center; color:var(--muted); font-size:13px; margin-top:16px}
+  @media(max-width:440px){ .dishes{grid-template-columns:1fr} h1{font-size:28px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="banner">
+    <div class="papel">🌮 🏖️ 🌊</div>
+    <h1>Taco Pool Party!</h1>
+    <p class="sub">You're invited — please RSVP below</p>
+  </div>
+
+  <!-- FLYER: replace this whole div with <div class="flyer"><img src="flyer.jpg" alt="Party flyer"></div> once you add your flyer image -->
+  <div class="flyer" id="flyer">📌 Flyer coming soon</div>
+
+  <div class="card">
+    <div class="details">
+      <div class="row"><span class="ico">📍</span><div>
+        <strong>540 W Woodbury Rd</strong><br>Altadena, CA 91001
+        <br><a href="https://maps.google.com/?q=540+W+Woodbury+Rd,+Altadena,+CA+91001" target="_blank">Open in Maps →</a>
+      </div></div>
+      <div class="row"><span class="ico">🗓️</span><div><strong>Saturday, July 11, 2026</strong></div></div>
+      <div class="row"><span class="ico">🌮</span><div>Tacos are catered by <strong>Kon-Tiki Taco</strong> — quesadillas, tacos, rice &amp; beans, chips, salsa, guac, elote, coconut shrimp, and agua frescas are all covered!</div></div>
+      <div class="row"><span class="ico">🥗</span><div>Bring a <strong>side, dessert, or drink</strong> to round out the spread.</div></div>
+    </div>
+  </div>
+
+  <form class="card" id="rsvpForm">
+    <label for="name">Your name</label>
+    <input type="text" id="name" required placeholder="First &amp; last name">
+
+    <div class="two">
+      <div><label for="email">Email</label><input type="email" id="email" placeholder="you@email.com"></div>
+      <div><label for="phone">Mobile</label><input type="tel" id="phone" placeholder="(555) 555-5555"></div>
+    </div>
+    <p class="hint">For event reminders only.</p>
+
+    <label>Will you be there?</label>
+    <div class="attend">
+      <label><input type="radio" name="attend" value="Yes, I'll be there!" checked><span>✅ Yes!</span></label>
+      <label><input type="radio" name="attend" value="Sorry, can't make it"><span>😔 Can't make it</span></label>
+    </div>
+
+    <label for="guests">How many people in your party? (including you)</label>
+    <input type="number" id="guests" min="1" value="1">
+
+    <label>What will you bring?</label>
+    <p class="hint">Tacos &amp; the basics are catered — these are extras to complement them. Check anything you'd like to bring.</p>
+
+    <p class="cat">Extra mains &amp; sides</p>
+    <div class="dishes" id="dishes">
+      <label class="dish"><input type="checkbox" value="Tamales">🫔 Tamales</label>
+      <label class="dish"><input type="checkbox" value="Ceviche">🐟 Ceviche</label>
+      <label class="dish"><input type="checkbox" value="Enchiladas">🌶️ Enchiladas</label>
+      <label class="dish"><input type="checkbox" value="Carne asada / grilled meats">🥩 Carne asada</label>
+      <label class="dish"><input type="checkbox" value="Tostadas">🫓 Tostadas</label>
+      <label class="dish"><input type="checkbox" value="Extra rice & beans">🍚 Extra rice &amp; beans</label>
+      <label class="dish"><input type="checkbox" value="Extra elote / esquites">🌽 Extra elote / esquites</label>
+      <label class="dish"><input type="checkbox" value="Caesar salad">🥗 Caesar salad</label>
+      <label class="dish"><input type="checkbox" value="Mac & cheese (kid-friendly)">🧀 Mac &amp; cheese (kids)</label>
+      <label class="dish"><input type="checkbox" value="Fruit platter">🍉 Fruit platter</label>
+      <label class="dish"><input type="checkbox" value="Veggie tray & dip">🥕 Veggie tray</label>
+      <label class="dish"><input type="checkbox" value="Charcuterie board">🧆 Charcuterie</label>
+    </div>
+
+    <p class="cat">Desserts</p>
+    <div class="dishes">
+      <label class="dish"><input type="checkbox" value="Churros">🥨 Churros</label>
+      <label class="dish"><input type="checkbox" value="Flan / tres leches">🍮 Flan / tres leches</label>
+      <label class="dish"><input type="checkbox" value="Paletas / ice cream">🍦 Paletas / ice cream</label>
+      <label class="dish"><input type="checkbox" value="Cookies / brownies">🍪 Cookies / brownies</label>
+    </div>
+
+    <p class="cat">Drinks &amp; supplies</p>
+    <div class="dishes">
+      <label class="dish"><input type="checkbox" value="Beer">🍺 Beer</label>
+      <label class="dish"><input type="checkbox" value="Margaritas / cocktails">🍹 Margaritas</label>
+      <label class="dish"><input type="checkbox" value="Wine">🍷 Wine</label>
+      <label class="dish"><input type="checkbox" value="Soda / sparkling water">🥤 Soda / sparkling</label>
+      <label class="dish"><input type="checkbox" value="Bottled water">💧 Bottled water</label>
+      <label class="dish"><input type="checkbox" value="Ice">🧊 Ice</label>
+      <label class="dish"><input type="checkbox" value="Cups & plates">🍽️ Cups &amp; plates</label>
+      <label class="dish"><input type="checkbox" value="Utensils / napkins">🍴 Utensils / napkins</label>
+      <label class="dish"><input type="checkbox" value="A surprise!">🎁 A surprise!</label>
+    </div>
+
+    <label for="other">Bringing something not listed?</label>
+    <input type="text" id="other" placeholder="e.g., churros, horchata...">
+
+    <label for="note">Note for the host (optional)</label>
+    <textarea id="note" rows="2" placeholder="Anything else we should know?"></textarea>
+
+    <button type="submit">📧 Send my RSVP</button>
+    <p class="foot">Tapping send opens your email app with the RSVP filled in — just hit send.</p>
+  </form>
+</div>
+
+<script>
+  // ⚙️ Change this to the host's email address:
+  const HOST_EMAIL = "noelhyun@gmail.com";
+
+  document.getElementById('rsvpForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim() || "(no name)";
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const attend = document.querySelector('input[name="attend"]:checked').value;
+    const guests = document.getElementById('guests').value || "1";
+    const dishes = [...document.querySelectorAll('.dish input:checked')].map(c=>c.value);
+    const other = document.getElementById('other').value.trim();
+    const note = document.getElementById('note').value.trim();
+    if(other) dishes.push(other);
+
+    let body = "RSVP for the Taco Pool Party — 540 W Woodbury Rd, Altadena\n";
+    body += "Saturday, July 11, 2026\n\n";
+    body += "Name: " + name + "\n";
+    body += "Email: " + (email || "—") + "\n";
+    body += "Mobile: " + (phone || "—") + "\n";
+    body += "Attending: " + attend + "\n";
+    body += "Party size: " + guests + "\n";
+    body += "Bringing: " + (dishes.length ? dishes.join(", ") : "Nothing yet") + "\n";
+    if(note) body += "Note: " + note + "\n";
+
+    const subject = "RSVP — " + name + " (" + attend + ")";
+    window.location.href = "mailto:" + HOST_EMAIL +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body);
+  });
+</script>
+</body>
+</html>
