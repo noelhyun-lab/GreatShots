@@ -36,6 +36,9 @@
     border:2px dashed var(--accent2); border-radius:16px; margin-top:18px; color:var(--muted);
     background:#fffdf7; padding:20px;}
   .flyer img{max-width:100%; border-radius:12px; display:block}
+  .rsvp-link{display:inline-block; margin-top:6px; padding:12px 20px; font-size:16px; font-weight:700;
+    color:#fff; text-decoration:none; border-radius:10px; word-break:break-all;
+    background:linear-gradient(90deg,var(--accent),var(--accent2)); box-shadow:0 4px 12px rgba(228,87,46,.3);}
   .two{display:flex; gap:10px}
   .two>div{flex:1}
   .details{display:flex; flex-direction:column; gap:8px; font-size:15px}
@@ -85,7 +88,13 @@
   </div>
 
   <!-- FLYER: replace this whole div with <div class="flyer"><img src="flyer.jpg" alt="Party flyer"></div> once you add your flyer image -->
-  <div class="flyer" id="flyer">📌 Flyer coming soon</div>
+  <div class="flyer" id="flyer">
+    <div>
+      <div style="font-size:15px; margin-bottom:12px;">Share &amp; RSVP at:</div>
+      <a class="rsvp-link" href="https://noelhyun-lab.github.io/GreatShots/">noelhyun-lab.github.io/GreatShots</a>
+      <div style="font-size:13px; margin-top:14px; color:var(--muted);">📌 Flyer image coming soon</div>
+    </div>
+  </div>
 
   <div class="card">
     <div class="details">
