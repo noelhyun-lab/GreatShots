@@ -126,6 +126,11 @@
     <label>What will you bring?</label>
     <p class="hint">Tacos &amp; the basics are catered — these are extras to complement them. Check anything you'd like to bring.</p>
 
+    <div id="board" style="margin-top:12px; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:#fffdf7;">
+      <div style="font-weight:700; font-size:13px; color:var(--accent); margin-bottom:6px;">📋 Sign-up board <span style="font-weight:500; color:var(--muted);">(planning for ~40 guests)</span></div>
+      <div id="boardBody" style="font-size:13px; line-height:1.5; color:var(--muted);">Loading…</div>
+    </div>
+
     <p class="cat">Appetizers &amp; sides</p>
     <div class="dishes" id="dishes">
       <label class="dish"><input type="checkbox" value="Extra rice & beans">🍚 Extra rice &amp; beans</label>
@@ -176,6 +181,63 @@
   // RSVPs are saved to a private database (not email).
   const ENDPOINT = "https://xvsarrcpykpixnbznveb.supabase.co/functions/v1/greatshots-rsvp";
 
+  function escapeHtml(s){ var d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
+
+  // Target number of contributions per item for ~40 guests (tweakable).
+  var NEEDS = {
+    "Extra rice & beans": 2,
+    "Extra elote / esquites": 2,
+    "Caesar salad": 3,
+    "Mac & cheese (kid-friendly)": 2,
+    "Fruit platter": 3,
+    "Veggie tray & dip": 2,
+    "Churros": 1,
+    "Flan / tres leches": 1,
+    "Paletas / ice cream": 2,
+    "Cookies / brownies": 2,
+    "Beer": 3,
+    "Margaritas / cocktails": 2,
+    "Wine": 2,
+    "Soda / sparkling water": 3,
+    "Bottled water": 4,
+    "Ice": 3,
+    "Cups & plates": 2,
+    "Utensils / napkins": 2
+  };
+  var ORDER = Object.keys(NEEDS);
+
+  // Live sign-up board: what's still needed vs already covered.
+  function loadClaimed(){
+    fetch(ENDPOINT, { method:'GET' }).then(function(r){ return r.json(); }).then(function(rows){
+      if(!Array.isArray(rows)) rows = [];
+      var map = {};
+      rows.forEach(function(r){
+        if(String(r.attending) === 'No') return;
+        (r.items||[]).forEach(function(it){ it=String(it).trim(); if(!it) return; if(!map[it]) map[it]=[]; map[it].push(r.name||'Someone'); });
+      });
+      var need = [], have = [];
+      ORDER.forEach(function(k){
+        var names = map[k] || [];
+        var rem = NEEDS[k] - names.length;
+        if(names.length > 0){
+          have.push('<div style="padding:2px 0;">✅ <strong>'+escapeHtml(k)+'</strong> &mdash; '+names.map(escapeHtml).join(', ')+(rem>0?' <span style="color:#8a6d57;">(could use '+rem+' more)</span>':'')+'</div>');
+        }
+        if(rem > 0){
+          need.push('<div style="padding:2px 0;">⬜ <strong>'+escapeHtml(k)+'</strong> <span style="color:#8a6d57;">&mdash; need '+rem+(names.length>0?' more':'')+'</span></div>');
+        }
+      });
+      Object.keys(map).forEach(function(k){
+        if(NEEDS.hasOwnProperty(k)) return; // free-text / surprise extras
+        have.push('<div style="padding:2px 0;">✅ <strong>'+escapeHtml(k)+'</strong> &mdash; '+map[k].map(escapeHtml).join(', ')+'</div>');
+      });
+      var html = '';
+      if(need.length){ html += '<div style="font-weight:700; color:var(--accent); margin:2px 0 4px;">Still needs people:</div>'+need.join(''); }
+      if(have.length){ html += '<div style="font-weight:700; color:#2e8b57; margin:10px 0 4px;">Already covered:</div>'+have.join(''); }
+      if(!html) html = 'Be the first to sign up!';
+      document.getElementById('boardBody').innerHTML = html;
+    }).catch(function(){ document.getElementById('boardBody').innerHTML = 'Sign-up board will appear here.'; });
+  }
+
   document.getElementById('rsvpForm').addEventListener('submit', function(e){
     e.preventDefault();
     var name = document.getElementById('name').value.trim();
@@ -211,6 +273,8 @@
         alert('Network error. Please try again.');
       });
   });
+
+  loadClaimed();
 </script>
 </body>
 </html>
