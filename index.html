@@ -127,7 +127,8 @@
     <p class="hint">Tacos &amp; the basics are catered — these are extras to complement them. Check anything you'd like to bring.</p>
 
     <div id="board" style="margin-top:12px; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:#fffdf7;">
-      <div style="font-weight:700; font-size:13px; color:var(--accent); margin-bottom:6px;">📋 Sign-up board <span style="font-weight:500; color:var(--muted);">(planning for ~40 guests)</span></div>
+      <div style="font-weight:700; font-size:13px; color:var(--accent); margin-bottom:2px;">📋 Sign-up board <span style="font-weight:500; color:var(--muted);">(planning for ~40 guests)</span></div>
+      <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">Please bring enough to serve <strong>6–8 people</strong>.</div>
       <div id="boardBody" style="font-size:13px; line-height:1.5; color:var(--muted);">Loading…</div>
     </div>
 
@@ -182,7 +183,7 @@
 
   function escapeHtml(s){ var d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
 
-  // Target number of contributions per item for ~40 guests (tweakable).
+  // Target number of contributions per item for ~40 guests (tweakable). Infinity = no cap.
   var NEEDS = {
     "Extra rice & beans": 1,
     "Extra elote / esquites": 1,
@@ -193,9 +194,9 @@
     "Churros or flan / tres leches": 2,
     "Paletas / ice cream": 2,
     "Cookies / brownies": 1,
-    "Beer": 2,
+    "Beer": Infinity,
     "Margaritas / cocktails": 2,
-    "Wine": 1,
+    "Wine": Infinity,
     "Soda / sparkling water": 2,
     "Bottled water": 2,
     "Ice": 2,
@@ -216,6 +217,11 @@
       var need = [], have = [];
       ORDER.forEach(function(k){
         var names = map[k] || [];
+        if(NEEDS[k] === Infinity){
+          var so = names.length ? ' <span style="color:#8a6d57;">(so far: '+names.map(escapeHtml).join(', ')+')</span>' : '';
+          need.push('<div style="padding:2px 0;">⬜ <strong>'+escapeHtml(k)+'</strong> <span style="color:#8a6d57;">&mdash; the more the merrier</span>'+so+'</div>');
+          return;
+        }
         var rem = NEEDS[k] - names.length;
         if(names.length > 0){
           have.push('<div style="padding:2px 0;">✅ <strong>'+escapeHtml(k)+'</strong> &mdash; '+names.map(escapeHtml).join(', ')+(rem>0?' <span style="color:#8a6d57;">(could use '+rem+' more)</span>':'')+'</div>');
