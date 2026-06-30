@@ -160,19 +160,19 @@
 
   function escapeHtml(s){ var d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
 
-  // Target number of contributions per item for ~40 guests (tweakable).
+  // Target number of contributions per item for ~40 guests (tweakable). Infinity = no cap.
   var NEEDS = {
     "Extra rice & beans": 1,
     "Extra elote / esquites": 1,
     "Caesar salad": 2,
-    "Mac & cheese (kid-friendly)": 2,
+    "Mac & cheese (kid-friendly)": 1,
     "Fruit platter": 2,
     "Veggie tray & dip": 1,
     "Churros or flan / tres leches": 2,
     "Paletas / ice cream": 2,
     "Cookies / brownies": 1,
     "Beer": Infinity,
-    "Margaritas / cocktails": 2,
+    "Margaritas / cocktails": Infinity,
     "Wine": Infinity,
     "Soda / sparkling water": 2,
     "Bottled water": 2,
