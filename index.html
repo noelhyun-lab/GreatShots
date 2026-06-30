@@ -69,6 +69,12 @@
   .hint{font-size:13px; color:var(--muted); margin:4px 0 0}
   .cat{font-weight:700; font-size:13px; text-transform:uppercase; letter-spacing:.5px;
        color:var(--accent); margin:16px 0 2px}
+  .bcat{font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:var(--accent); margin:14px 0 2px}
+  .brow{display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px dashed var(--line); cursor:pointer}
+  .brow:last-child{border-bottom:none}
+  .brow input{margin-top:2px; accent-color:var(--accent); width:18px; height:18px; flex:none}
+  .brow .bstat{color:var(--muted); font-size:12.5px}
+  .brow .bgood{color:var(--green); font-weight:700}
   button{
     width:100%; margin-top:20px; padding:15px; font-size:16px; font-weight:700; color:#fff;
     background:linear-gradient(90deg,var(--accent),var(--accent2)); border:none; border-radius:12px;
@@ -124,41 +130,12 @@
     <input type="number" id="guests" min="1" value="1">
 
     <label>What will you bring?</label>
-    <p class="hint">Tacos &amp; the basics are catered — these are extras to complement them. Check anything you'd like to bring.</p>
+    <p class="hint">Tacos &amp; the basics are catered — these are extras. Tap the box to claim an item.</p>
 
-    <div id="board" style="margin-top:12px; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:#fffdf7;">
+    <div id="board" style="margin-top:12px; padding:14px 16px; border:1px solid var(--line); border-radius:12px; background:#fffdf7;">
       <div style="font-weight:700; font-size:13px; color:var(--accent); margin-bottom:2px;">📋 Sign-up board <span style="font-weight:500; color:var(--muted);">(planning for ~40 guests)</span></div>
-      <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">Please bring enough to serve <strong>6–8 people</strong>.</div>
-      <div id="boardBody" style="font-size:13px; line-height:1.5; color:var(--muted);">Loading…</div>
-    </div>
-
-    <p class="cat">Appetizers &amp; sides</p>
-    <div class="dishes" id="dishes">
-      <label class="dish"><input type="checkbox" value="Extra rice & beans">🍚 Extra rice &amp; beans</label>
-      <label class="dish"><input type="checkbox" value="Extra elote / esquites">🌽 Extra elote / esquites</label>
-      <label class="dish"><input type="checkbox" value="Caesar salad">🥗 Caesar salad</label>
-      <label class="dish"><input type="checkbox" value="Mac & cheese (kid-friendly)">🧀 Mac &amp; cheese (kids)</label>
-      <label class="dish"><input type="checkbox" value="Fruit platter">🍉 Fruit platter</label>
-      <label class="dish"><input type="checkbox" value="Veggie tray & dip">🥕 Veggie tray</label>
-    </div>
-
-    <p class="cat">Desserts</p>
-    <div class="dishes">
-      <label class="dish"><input type="checkbox" value="Churros or flan / tres leches">🍮 Churros or flan</label>
-      <label class="dish"><input type="checkbox" value="Paletas / ice cream">🍦 Paletas / ice cream</label>
-      <label class="dish"><input type="checkbox" value="Cookies / brownies">🍪 Cookies / brownies</label>
-    </div>
-
-    <p class="cat">Drinks &amp; supplies</p>
-    <div class="dishes">
-      <label class="dish"><input type="checkbox" value="Beer">🍺 Beer</label>
-      <label class="dish"><input type="checkbox" value="Margaritas / cocktails">🍹 Margaritas</label>
-      <label class="dish"><input type="checkbox" value="Wine">🍷 Wine</label>
-      <label class="dish"><input type="checkbox" value="Soda / sparkling water">🥤 Soda / sparkling</label>
-      <label class="dish"><input type="checkbox" value="Bottled water">💧 Bottled water</label>
-      <label class="dish"><input type="checkbox" value="Ice">🧊 Ice</label>
-      <label class="dish"><input type="checkbox" value="Cups & plates">🍽️ Cups &amp; plates</label>
-      <label class="dish"><input type="checkbox" value="Utensils / napkins">🍴 Utensils / napkins</label>
+      <div style="font-size:12px; color:var(--muted); margin-bottom:4px;">Please bring enough to serve <strong>6–8 people</strong>.</div>
+      <div id="boardBody" style="font-size:14px;">Loading…</div>
     </div>
 
     <label for="other">Bringing something not listed?</label>
@@ -183,7 +160,7 @@
 
   function escapeHtml(s){ var d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
 
-  // Target number of contributions per item for ~40 guests (tweakable). Infinity = no cap.
+  // Target number of contributions per item for ~40 guests (tweakable).
   var NEEDS = {
     "Extra rice & beans": 1,
     "Extra elote / esquites": 1,
@@ -203,9 +180,25 @@
     "Cups & plates": 1,
     "Utensils / napkins": 1
   };
-  var ORDER = Object.keys(NEEDS);
+  // Items grouped by category, in display order.
+  var CATEGORIES = [
+    { title:"Appetizers & sides", items:["Extra rice & beans","Extra elote / esquites","Caesar salad","Mac & cheese (kid-friendly)","Fruit platter","Veggie tray & dip"] },
+    { title:"Desserts", items:["Churros or flan / tres leches","Paletas / ice cream","Cookies / brownies"] },
+    { title:"Drinks & supplies", items:["Beer","Margaritas / cocktails","Wine","Soda / sparkling water","Bottled water","Ice","Cups & plates","Utensils / napkins"] }
+  ];
 
-  // Live sign-up board: what's still needed vs already covered.
+  function statusFor(item, names){
+    var need = NEEDS[item];
+    if(need === Infinity){
+      return names.length ? 'the more the merrier &middot; so far: '+names.map(escapeHtml).join(', ') : 'the more the merrier';
+    }
+    var rem = need - names.length;
+    if(rem <= 0){ return '<span class="bgood">✓ covered</span> &middot; '+names.map(escapeHtml).join(', '); }
+    if(names.length > 0){ return 'need '+rem+' more &middot; '+names.map(escapeHtml).join(', '); }
+    return 'need '+need;
+  }
+
+  // Build the interactive sign-up board with live status next to each checkbox.
   function loadClaimed(){
     fetch(ENDPOINT, { method:'GET' }).then(function(r){ return r.json(); }).then(function(rows){
       if(!Array.isArray(rows)) rows = [];
@@ -214,39 +207,24 @@
         if(String(r.attending) === 'No') return;
         (r.items||[]).forEach(function(it){ it=String(it).trim(); if(!it) return; if(!map[it]) map[it]=[]; map[it].push(r.name||'Someone'); });
       });
-      var need = [], have = [];
-      ORDER.forEach(function(k){
-        var names = map[k] || [];
-        if(NEEDS[k] === Infinity){
-          var so = names.length ? ' <span style="color:#8a6d57;">(so far: '+names.map(escapeHtml).join(', ')+')</span>' : '';
-          need.push('<div style="padding:2px 0;">⬜ <strong>'+escapeHtml(k)+'</strong> <span style="color:#8a6d57;">&mdash; the more the merrier</span>'+so+'</div>');
-          return;
-        }
-        var rem = NEEDS[k] - names.length;
-        if(names.length > 0){
-          have.push('<div style="padding:2px 0;">✅ <strong>'+escapeHtml(k)+'</strong> &mdash; '+names.map(escapeHtml).join(', ')+(rem>0?' <span style="color:#8a6d57;">(could use '+rem+' more)</span>':'')+'</div>');
-        }
-        if(rem > 0){
-          need.push('<div style="padding:2px 0;">⬜ <strong>'+escapeHtml(k)+'</strong> <span style="color:#8a6d57;">&mdash; need '+rem+(names.length>0?' more':'')+'</span></div>');
-        }
-      });
-      Object.keys(map).forEach(function(k){
-        if(NEEDS.hasOwnProperty(k)) return; // free-text / surprise extras
-        have.push('<div style="padding:2px 0;">✅ <strong>'+escapeHtml(k)+'</strong> &mdash; '+map[k].map(escapeHtml).join(', ')+'</div>');
-      });
       var html = '';
-      if(need.length){ html += '<div style="font-weight:700; color:var(--accent); margin:2px 0 4px;">Still needs people:</div>'+need.join(''); }
-      if(have.length){ html += '<div style="font-weight:700; color:#2e8b57; margin:10px 0 4px;">Already covered:</div>'+have.join(''); }
-      if(!html) html = 'Be the first to sign up!';
+      CATEGORIES.forEach(function(cat){
+        html += '<div class="bcat">'+escapeHtml(cat.title)+'</div>';
+        cat.items.forEach(function(item){
+          var names = map[item] || [];
+          html += '<label class="brow"><input type="checkbox" class="claim" value="'+escapeHtml(item)+'">'
+                + '<span><strong>'+escapeHtml(item)+'</strong><br><span class="bstat">'+statusFor(item, names)+'</span></span></label>';
+        });
+      });
       document.getElementById('boardBody').innerHTML = html;
-    }).catch(function(){ document.getElementById('boardBody').innerHTML = 'Sign-up board will appear here.'; });
+    }).catch(function(){ document.getElementById('boardBody').innerHTML = 'Could not load the sign-up board — please refresh.'; });
   }
 
   document.getElementById('rsvpForm').addEventListener('submit', function(e){
     e.preventDefault();
     var name = document.getElementById('name').value.trim();
     if(!name){ alert('Please add your name.'); return; }
-    var items = [].slice.call(document.querySelectorAll('.dish input:checked')).map(function(c){ return c.value; });
+    var items = [].slice.call(document.querySelectorAll('.claim:checked')).map(function(c){ return c.value; });
     var other = document.getElementById('other').value.trim();
     if(other) items.push(other);
     var payload = {
