@@ -162,8 +162,8 @@
 
   // Target number of contributions per item for ~40 guests (tweakable). Infinity = no cap.
   var NEEDS = {
-    "Extra rice & beans": 1,
-    "Extra elote / esquites": 1,
+    
+    
     "Caesar salad": 1,
     
     "Fruit platter": 1,
@@ -175,16 +175,16 @@
     "Margaritas / cocktails": Infinity,
     "Wine": Infinity,
     "Soda / sparkling water": 2,
-    "Bottled water": 2,
+    "Bottled water": 1,
     "Ice": 2,
-    "Cups & plates": 1,
-    "Utensils / napkins": 1
+    
+    
   };
   // Items grouped by category, in display order.
   var CATEGORIES = [
-    { title:"Appetizers & sides", items:["Extra rice & beans","Extra elote / esquites","Caesar salad","Fruit platter","Veggie tray & dip"] },
+    { title:"Appetizers & sides", items:["Caesar salad","Fruit platter","Veggie tray & dip"] },
     { title:"Desserts", items:["Churros or flan / tres leches","Paletas / ice cream","Cookies / brownies"] },
-    { title:"Drinks & supplies", items:["Beer","Margaritas / cocktails","Wine","Soda / sparkling water","Bottled water","Ice","Cups & plates","Utensils / napkins"] }
+    { title:"Drinks & supplies", items:["Beer","Margaritas / cocktails","Wine","Soda / sparkling water","Bottled water","Ice"] }
   ];
 
   function statusFor(item, names){
